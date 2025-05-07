@@ -16,8 +16,7 @@ class SyncService {
   
   Timer? _syncTimer;
   bool _isSyncing = false;
-  
-  // Initialize the service
+
   void initialize() {
     // Listen for connectivity changes
     _connectivityService.connectivityStream.listen((isOnline) {
@@ -30,7 +29,6 @@ class SyncService {
       }
     });
     
-    // Start periodic sync if online
     _connectivityService.isOnline().then((isOnline) {
       if (isOnline) {
         _startSyncTimer();
@@ -40,27 +38,22 @@ class SyncService {
   
   // Start periodic sync timer
   void _startSyncTimer() {
-    // Cancel existing timer if it exists
     _stopSyncTimer();
     
-    // Start a new timer that syncs every 15 minutes
     _syncTimer = Timer.periodic(const Duration(minutes: 15), (_) {
       syncItems();
     });
     
-    // Perform an immediate sync
     syncItems();
   }
   
-  // Stop the sync timer
   void _stopSyncTimer() {
     _syncTimer?.cancel();
     _syncTimer = null;
   }
   
-  // Sync items from local storage to cloud
+
   Future<void> syncItems() async {
-    // Prevent multiple syncs from running simultaneously
     if (_isSyncing) {
       _logger.info('Sync already in progress, skipping');
       return;
@@ -93,12 +86,12 @@ class SyncService {
       // Sync each item
       for (final localItem in notUploadedItems) {
         try {
-          // Convert local image paths to File objects
+          
           final imageFiles = localItem.imagePaths
               .map((path) => File(path))
               .toList();
           
-          // Upload images
+          
           final imageUrls = await _itemRepository.uploadItemImages(imageFiles);
           
           // Create item model
@@ -119,7 +112,7 @@ class SyncService {
             updatedAt: DateTime.now(),
           );
           
-          // Save to cloud
+          
           await _itemRepository.createItem(item);
           
           // Mark as uploaded
@@ -128,7 +121,6 @@ class SyncService {
           _logger.info('Successfully synced item: ${localItem.id}');
         } catch (e) {
           _logger.error('Failed to sync item ${localItem.id}: $e');
-          // Continue with other items
         }
       }
       

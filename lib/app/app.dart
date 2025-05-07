@@ -7,7 +7,11 @@ import '../presentation/themes/app_theme.dart';
 import 'routes.dart';
 
 class FindMeApp extends StatelessWidget {
-  const FindMeApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+  const FindMeApp({
+    Key? key,
+    required this.navigatorKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +22,7 @@ class FindMeApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'FindMe',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

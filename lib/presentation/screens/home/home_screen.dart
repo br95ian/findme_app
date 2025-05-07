@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import '../../../core/services/notification_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/item_provider.dart';
 import '../../providers/connectivity_provider.dart';
@@ -37,6 +41,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+  Future<void> requestNotificationPermissions() async {
+    if (Platform.isAndroid) {
+      // For Android 13+ (API level 33+)
+      if (await FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestPermission() ??
+          false) {
+        log('Notification permission granted');
+      } else {
+        log('Notification permission denied');
+      }
+    }
   }
   
   Future<void> _loadItems() async {
@@ -159,10 +177,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ],
         bottom: TabBar(
           controller: _tabController,
-          labelColor: Colors.white, // Explicitly set label color
-          unselectedLabelColor: Colors.white70, // Color when not selected
-          indicatorColor: Colors.white, // Color of the indicator line
-          indicatorWeight: 3.0, // Make indicator more visible
+          labelColor: Colors.white, 
+          unselectedLabelColor: Colors.white70, 
+          indicatorColor: Colors.white, 
+          indicatorWeight: 3.0, 
           tabs: const [
             Tab(text: 'Lost Items', icon: Icon(Icons.search)),
             Tab(text: 'Found Items', icon: Icon(Icons.check_circle)),

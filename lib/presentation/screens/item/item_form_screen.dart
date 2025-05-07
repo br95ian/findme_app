@@ -14,7 +14,7 @@ import '../../providers/item_provider.dart';
 import '../../providers/connectivity_provider.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
-import '../../../app/routes.dart'; // Make sure this import exists
+import '../../../app/routes.dart';
 
 class ItemFormScreen extends StatefulWidget {
   const ItemFormScreen({Key? key}) : super(key: key);
@@ -28,6 +28,7 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationNameController = TextEditingController();
+  final _phoneController = TextEditingController();
   
   String _category = 'Electronics';
   ItemType _itemType = ItemType.lost;
@@ -81,6 +82,7 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
     _titleController.dispose();
     _descriptionController.dispose();
     _locationNameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -94,6 +96,7 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
       _itemType = _existingItem!.type;
       _date = _existingItem!.date;
       _locationNameController.text = _existingItem!.locationName;
+      _phoneController.text = _existingItem!.phoneNumber ?? '';
       _selectedLocation = LatLng(
         _existingItem!.location.latitude,
         _existingItem!.location.longitude,
@@ -421,6 +424,7 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
             location: GeoPoint(_selectedLocation!.latitude, _selectedLocation!.longitude),
             locationName: _locationNameController.text,
             date: _date,
+            phoneNumber: _phoneController.text,
           );
         } else {
           // Save locally
@@ -631,6 +635,16 @@ class _ItemFormScreenState extends State<ItemFormScreen> {
                           ],
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Phone number field
+                    CustomTextField(
+                      controller: _phoneController,
+                      labelText: 'Contact Phone Number (optional)',
+                      keyboardType: TextInputType.phone,
+                      prefixIcon: const Icon(Icons.phone),
+                      hintText: 'Enter your phone number for contact',
                     ),
                     const SizedBox(height: 16),
                     

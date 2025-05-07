@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../app/routes.dart';
 import '../../core/services/auth_service.dart';
 import '../../data/models/user_model.dart';
+import '../../main.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -73,6 +75,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       await _authService.signOut();
       _user = null;
+      if (navigatorKey.currentContext != null) {
+        Navigator.of(navigatorKey.currentContext!, rootNavigator: true)
+          .pushNamedAndRemoveUntil(AppRoutes.login, (_) => false);
+      }
     } catch (e) {
       _setError(e.toString());
     } finally {

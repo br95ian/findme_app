@@ -97,6 +97,7 @@ class ItemProvider extends ChangeNotifier {
     required GeoPoint location,
     required String locationName,
     required DateTime date,
+    String? phoneNumber, 
   }) async {
     _setLoading(true);
     _clearError();
@@ -115,7 +116,7 @@ class ItemProvider extends ChangeNotifier {
       final item = ItemModel(
         userId: currentUser.id,
         userName: currentUser.name,
-        userContact: currentUser.phone ?? currentUser.email,
+        userContact: currentUser.email,
         title: title,
         description: description,
         category: category,
@@ -124,9 +125,11 @@ class ItemProvider extends ChangeNotifier {
         location: location,
         locationName: locationName,
         date: date,
+        phoneNumber: phoneNumber
       );
       
       await _itemRepository.createItem(item);
+      _selectedItem = item;
       return true;
     } catch (e) {
       _setError(e.toString());
@@ -166,7 +169,7 @@ class ItemProvider extends ChangeNotifier {
         id: const Uuid().v4(),
         userId: currentUser.id,
         userName: currentUser.name,
-        userContact: currentUser.phone ?? currentUser.email,
+        userContact: currentUser.email,
         title: title,
         description: description,
         category: category,

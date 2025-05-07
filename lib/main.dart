@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/sync_service.dart';
 import 'data/models/local/local_item_model.dart';
 import 'firebase_options.dart';
 import 'app/app.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,12 +34,13 @@ Future<void> main() async {
   
   // Initialize notifications
   final notificationService = NotificationService();
-  await notificationService.initialize();
+  await notificationService.initialize(navigatorKey);
+  await notificationService.requestNotificationPermissions();
   
   // Initialize sync service
   final syncService = SyncService();
   syncService.initialize();
   
   // Run the app
-  runApp(const FindMeApp()); 
+  runApp( FindMeApp(navigatorKey: navigatorKey,)); 
 }

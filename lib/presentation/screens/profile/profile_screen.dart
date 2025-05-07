@@ -216,7 +216,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       await authProvider.signOut();
       
       if (mounted) {
-        Navigator.pushReplacementNamed(context, AppRoutes.login);
+        Navigator.pushNamedAndRemoveUntil(
+        context, 
+        AppRoutes.login, 
+        (_) => false
+      );
       }
     } catch (e) {
       if (mounted) {
@@ -263,6 +267,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         ],
         bottom: TabBar(
           controller: _tabController,
+          labelColor: Colors.white, 
+          unselectedLabelColor: Colors.white70, 
+          indicatorColor: Colors.white, 
+          indicatorWeight: 3.0,
           tabs: const [
             Tab(text: 'Profile'),
             Tab(text: 'My Items'),

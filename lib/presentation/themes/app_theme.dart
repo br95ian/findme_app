@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // Colors
-  static const Color primaryColor = Color(0xFF3F51B5);
+  static Color? primaryColor = Colors.red[900];
   static const Color accentColor = Color(0xFF4CAF50);
   static const Color backgroundColor = Colors.white;
   static const Color errorColor = Colors.red;
@@ -14,7 +14,7 @@ class AppTheme {
     return ThemeData(
       primaryColor: primaryColor,
       colorScheme: ColorScheme.light(
-        primary: primaryColor,
+        primary: primaryColor ?? Colors.red,
         secondary: accentColor,
         onPrimary: Colors.white,
       ),
@@ -25,8 +25,8 @@ class AppTheme {
         bodyLarge: TextStyle(fontSize: 16.0, color: textColor),
         bodyMedium: TextStyle(fontSize: 14.0, color: secondaryTextColor),
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: primaryColor,
+      appBarTheme: AppBarTheme(
+        backgroundColor: primaryColor ?? Colors.red[900],
         elevation: 0,
       ),
       buttonTheme: ButtonThemeData(
@@ -40,7 +40,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: primaryColor, width: 2),
+          borderSide:  BorderSide(color: primaryColor ?? Colors.red, width: 2),
         ),
       ),
     );
@@ -51,7 +51,7 @@ class AppTheme {
     return ThemeData(
       primaryColor: primaryColor,
       colorScheme: ColorScheme.dark(
-        primary: primaryColor,
+        primary: primaryColor ?? Colors.red,
         secondary: accentColor,
         onPrimary: Colors.white,
       ),
@@ -77,7 +77,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: primaryColor, width: 2),
+          borderSide: BorderSide(color: primaryColor ?? Colors.red, width: 2),
         ),
       ),
     );

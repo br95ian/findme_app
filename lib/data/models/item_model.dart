@@ -21,6 +21,7 @@ class ItemModel {
   final bool isResolved;
   final String? resolvedWithUserId;
   final DateTime? resolvedAt;
+  final String? phoneNumber;
 
   ItemModel({
     String? id,
@@ -35,6 +36,7 @@ class ItemModel {
     required this.location,
     required this.locationName,
     required this.date,
+    this.phoneNumber,
     DateTime? createdAt,
     DateTime? updatedAt,
     this.isResolved = false,
@@ -53,6 +55,7 @@ class ItemModel {
       'userName': userName,
       'userContact': userContact,
       'title': title,
+      'phoneNumber': phoneNumber,
       'description': description,
       'category': category,
       'type': type.name,
@@ -85,6 +88,7 @@ class ItemModel {
       imageUrls: List<String>.from(map['imageUrls']),
       location: map['location'],
       locationName: map['locationName'],
+      phoneNumber: map['phoneNumber'],
       date: (map['date'] as Timestamp).toDate(),
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       updatedAt: (map['updatedAt'] as Timestamp).toDate(),
