@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../app/routes.dart';
+import '../utils/logger.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final AppLogger _logger = AppLogger('NotificationService');
   
   Future<void> initialize(GlobalKey<NavigatorState> navigatorKey) async {
     try {
@@ -25,7 +27,7 @@ class NotificationService {
       
       await _createNotificationChannels();
     } catch (e) {
-      print('Error initializing notifications: $e');
+      _logger.error('Error initializing notifications: $e');
     }
   }
   
@@ -61,7 +63,7 @@ class NotificationService {
       } else {
       }
     } catch (e) {
-      print('Error creating notification channels: $e');
+      _logger.error('Error creating notification channels: $e');
     }
   }
 
@@ -117,7 +119,7 @@ class NotificationService {
       );
       
     } catch (e) {
-      print('Error showing notification: $e');
+      _logger.error('Error showing notification: $e');
     }
   }
   
@@ -146,19 +148,11 @@ class NotificationService {
         payload: payload,
       );
     } catch (e) {
-      print('Error showing match notification: $e');
+      _logger.error('Error showing match notification: $e');
     }
   }
   
   
-  
-  Future<void> cancelAllNotifications() async {
-    await _notificationsPlugin.cancelAll();
-  }
-  
-  Future<void> cancelNotification(int id) async {
-    await _notificationsPlugin.cancel(id);
-  }
   
   Future<bool> requestNotificationPermissions() async {
     try {

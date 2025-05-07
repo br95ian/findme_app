@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/item_provider.dart';
 import '../../widgets/custom_button.dart';
@@ -21,6 +21,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
+  
+  // Create a Cloudinary instance - replace with your credentials
+  final cloudinary = CloudinaryPublic('findmee', 'dcmsie5au', cache: false);
   
   late TabController _tabController;
   File? _profileImage;
@@ -139,15 +142,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       
       if (userId == null) return null;
       
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('profile_images')
-          .child('$userId.jpg');
+      // Upload to Cloudinary
+      final response = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          _profileImage!.path,
+          resourceType: CloudinaryResourceType.Image,
+        ),
+      );
       
-      final uploadTask = await storageRef.putFile(_profileImage!);
-      final downloadUrl = await uploadTask.ref.getDownloadURL();
-      
-      return downloadUrl;
+      // Return the secure URL
+      return response.secureUrl;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to upload image: $e')),
@@ -217,10 +221,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
-        context, 
-        AppRoutes.login, 
-        (_) => false
-      );
+          context, 
+          AppRoutes.login, 
+          (_) => false
+        );
       }
     } catch (e) {
       if (mounted) {
